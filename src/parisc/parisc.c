@@ -1756,7 +1756,7 @@ void __VISIBLE start_parisc_firmware(void)
             "\n"
             "Memory Test/Initialization Completed\n\n");
     printf("------------------------------------------------------------------------------\n"
-            "  (c) Copyright 2017-2018 Helge Deller <deller@gmx.de> and SeaBIOS developers.\n"
+            "  (c) Copyright 2017-2019 Helge Deller <deller@gmx.de> and SeaBIOS developers.\n"
             "------------------------------------------------------------------------------\n\n");
     printf( "  Processor   Speed            State           Coprocessor State  Cache Size\n"
             "  ---------  --------   ---------------------  -----------------  ----------\n");
