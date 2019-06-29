@@ -98,7 +98,7 @@ extern unsigned long boot_args[];
 extern char pdc_entry;
 extern char pdc_entry_table[12];
 extern char iodc_entry[512];
-extern char iodc_entry_table;
+extern char iodc_entry_table[32];
 
 /* args as handed over for firmware calls */
 #define ARG0 arg[7-0]
