@@ -12,7 +12,13 @@ SECTIONS
 	.text :	{
 		_text = .;	/* Text */
 		*(.head.text)
+                . = ALIGN(4096);
+                *(.text.sti.header)
+                *(.text.sti.regionlist)
 		*(.text)
+                *(.text.stifunc.*)
+                . = ALIGN(4096);
+                *(.text.sti.end)
 		*(.text.*)
 		_etext = . ;
 	}

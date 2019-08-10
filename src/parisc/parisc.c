@@ -210,6 +210,7 @@ static hppa_device_t parisc_devices[HPPA_MAX_CPUS+16] = { PARISC_DEVICE_LIST };
     LASI_LPT_HPA, \
     CPU_HPA,\
     MEMORY_HPA,\
+    LASI_GFX_HPA, \
     0
 
 static const char *hpa_name(unsigned long hpa)
@@ -1102,7 +1103,7 @@ static int pdc_add_valid(unsigned int *arg)
     if (ARG2 < ram_size)
         return PDC_OK;
     if (ARG2 < FIRMWARE_END)
-        return 1;
+        return 0;
     if (ARG2 <= 0xffffffff)
         return PDC_OK;
     dprintf(0, "\n\nSeaBIOS: FAILED!!!! PDC_ADD_VALID function %ld ARG2=%x called.\n", option, ARG2);
@@ -1673,7 +1674,7 @@ static void prepare_boot_path(volatile struct pz_device *dest,
     BUG_ON(sizeof(struct device_path) != 0x20);
 }
 
-
+extern struct sti_rom _sti_rom __attribute__((section(".sti.header")));
 void __VISIBLE start_parisc_firmware(void)
 {
     unsigned int i, cpu_hz;
@@ -1722,7 +1723,7 @@ void __VISIBLE start_parisc_firmware(void)
     PAGE0->imm_hpa = MEMORY_HPA;
     PAGE0->imm_spa_size = ram_size;
     PAGE0->imm_max_mem = ram_size;
-
+    PAGE0->proc_sti = (unsigned int)&_sti_rom;
     // Initialize stable storage
     init_stable_storage();
 
@@ -1733,7 +1734,7 @@ void __VISIBLE start_parisc_firmware(void)
     // set Qemu serial debug port
     DebugOutputPort = PARISC_SERIAL_CONSOLE;
     // PlatformRunningOn = PF_QEMU;  // emulate runningOnQEMU()
-
+    init_sti();
     cpu_hz = 100 * PAGE0->mem_10msec; /* Hz of this PARISC */
     dprintf(1, "\nPARISC SeaBIOS Firmware, %ld x PA7300LC (PCX-L2) at %d.%06d MHz, %lu MB RAM.\n",
             smp_cpus, cpu_hz / 1000000, cpu_hz % 1000000,
